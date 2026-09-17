@@ -2,18 +2,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Experimental data
-measurements = [1, 2, 3, 4]
-densities = [9.7, 9.7, 9.7, 9.7]
+measurements = [1, 2, 3, 4, 5]
+densities = [1.002, 0.997, 0.995, 0.994, 0.993]
 
-# Calculate average density
+# Calculate average density and sample standard deviation
 average_density = np.mean(densities)
+standard_deviation = np.std(densities, ddof=1)
 
-# Create bar graph
+# True density of water
+true_density = 0.99777
+
+# Create bar graph with error bars
 plt.bar(
     measurements,
     densities,
+    yerr=standard_deviation,
+    capsize=5,
     color="skyblue",
-    edgecolor="black"
+    edgecolor="black",
+    error_kw={"ecolor": "black", "elinewidth": 1.5}
 )
 
 # Add average density line
@@ -22,19 +29,28 @@ plt.axhline(
     color="red",
     linestyle="--",
     linewidth=2,
-    label=f"Average Density ({average_density:.1f} g/cm³)"
+    label=f"Average Density ({average_density:.4f} g/mL)"
+)
+
+# Add true density line
+plt.axhline(
+    y=true_density,
+    color="green",
+    linestyle="-",
+    linewidth=2,
+    label=f"True Density ({true_density:.5f} g/mL)"
 )
 
 # Labels and title
 plt.xlabel("Measurement")
-plt.ylabel("Density (g/cm³)")
-plt.title("Density Measurements of a Penny")
+plt.ylabel("Density (g/mL)")
+plt.title("Density of Water Measured Using a 10 mL Volumetric Pipette")
 
 # Make measurement numbers appear on x-axis
 plt.xticks(measurements)
 
-# Set y-axis range
-plt.ylim(0, 11)
+# Same y-axis range as the graduated cylinder graph
+plt.ylim(0.80, 1.06)
 
 # Add legend
 plt.legend()
